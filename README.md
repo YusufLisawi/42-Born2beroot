@@ -542,6 +542,7 @@ sudo mkdir /home/ftpyelaissa/ftp/files
 > We set the ownership and group of the ftp folder to nobody.
 ```
 sudo chown nobody:nogroup /home/ftpyelaissa/ftp
+sudo chown ftpyelaissa:ftpyelaissa /home/ftpyelaissa/ftp/files
 ```
 > We give write permission to all users.
 ```
