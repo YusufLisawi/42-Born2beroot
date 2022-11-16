@@ -554,6 +554,14 @@ sudo chmod a-w /home/ftpyelaissa/ftp
 echo ftpyelaissa | sudo tee -a /etc/vsftpd.userlist
 ```
 
+>Finally restart FTP service
+
+```
+sudo systemctl restart vsftpd
+```
+```
+sudo systemctl enable vsftpd
+```
 source ~ https://linuxhint.com/setup-vsftpd-ftp-server-on-debian10/
 
 source ~ https://www.youtube.com/watch?v=1WVBC0KBOeE
