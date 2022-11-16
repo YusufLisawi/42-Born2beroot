@@ -530,26 +530,26 @@ sudo nano /etc/vsftpd.conf
 ```
 > Create a new FTP user
 ```
-sudo adduser yelaissaFTP
+sudo adduser ftpyelaissa
 ```
 > create an ftp folder in the directory where our user is located.
 ```
-sudo mkdir /home/yelaissaFTP/ftp
+sudo mkdir /home/ftpyelaissa/ftp
 ```
 > create a folder of files
-sudo mkdir /home/yelaissaFTP/ftp/files
+sudo mkdir /home/ftpyelaissa/ftp/files
 
 > We set the ownership and group of the ftp folder to nobody.
 ```
-sudo chown nobody:nogroup /home/yelaissaFTP/ftp
+sudo chown nobody:nogroup /home/ftpyelaissa/ftp
 ```
 > We give write permission to all users.
 ```
-sudo chmod a-w /home/yelaissaFTP/ftp
+sudo chmod a-w /home/ftpyelaissa/ftp
 ```
 > We add our user to the list of users.
 ```
-echo yelaissaFTP | sudo tee -a /etc/vsftpd.userlist
+echo ftpyelaissa | sudo tee -a /etc/vsftpd.userlist
 ```
 
 source ~ https://linuxhint.com/setup-vsftpd-ftp-server-on-debian10/
