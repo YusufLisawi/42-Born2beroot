@@ -537,8 +537,9 @@ sudo adduser ftpyelaissa
 sudo mkdir /home/ftpyelaissa/ftp
 ```
 > create a folder of files
+```
 sudo mkdir /home/ftpyelaissa/ftp/files
-
+```
 > We set the ownership and group of the ftp folder to nobody.
 ```
 sudo chown nobody:nogroup /home/ftpyelaissa/ftp
