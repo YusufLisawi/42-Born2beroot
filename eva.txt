@@ -7,7 +7,7 @@ Q: Why Debian?
 A: It's easier to install and configure than CentOS (and i haven't use CentOS before)
 
 Q: What is virtual machine?
-A: A Virtual Machine (VM) is a compute resource that uses software instead of a physical computer to run programs and deploy 
+A: Ab Virtual Machine (VM) is a compute resource that uses software instead of a physical computer to run programs and deploy 
 apps. Each virtual machine runs its own operating system and functions separately from the other VMs, even when they are all
 running on the same host. For example, you can run a virtual MacOS machine on a physical PC. 
 

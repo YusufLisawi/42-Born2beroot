@@ -9,7 +9,7 @@ diskU=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{used += $3} END {print
 diskT=$(df -Bg | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} END {printf("%dGb", total)}')
 percDisk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%.2f"), used/total*100}')
 cpuL=$(top -bn1 | grep '^%Cpu' | awk -F , '{printf("%.1f%%\n"), 100 - $4}')
-lboot=$(who -b | awk '{printf("%s %s"), $3, $4}')
+lboot=$(who -b | awk '{printf("%s %s"), s$3, $4}')
 LVMS=$(lsblk | grep "LVM" | wc -l)
 cTCP=$(ss -s | grep 'TCP:' | awk -F "[()]" '{print $2}' | awk -v "RS=, " '$1 ~ "estab"' | awk '{print $2}')
 userlog=$(users | wc -w)

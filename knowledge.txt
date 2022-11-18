@@ -1,0 +1,622 @@
+Project Overview
+
+1. What is Virtual Machine (VM)?
+
+    A computer logically created by software on a real computer
+    A technique of creating a virtualization layer and installing a new OS on it to streamline the existence of only one environment (OS) on one physical resource (computer) (simulating hardware functions with software when trying to run different operating systems on a single computer) and run).
+    Simply put, the OS of the computer I am currently using is Windows, and if you want to use Linux on this computer at the same time, you can use a virtual machine.
+
+2. Choice of OS (why did you choose Debian)?
+
+    For Linux beginners, Debian is easier to access.
+
+3. Centos vs Debian?
+Centos ( Community Enterprise Operating System )
+
+    A distribution that took RHEL (Red Hat Enterprise Linux) released by Red Hat as it is and removed only the Red Hat brand and logo and distributed it.
+    It is available for free, but patching is slow because support is provided through the community rather than the company in case of problems.
+    It is very popular as a server operating system.
+
+Debian
+
+    Produced by the online community and distributed earlier than Red Hat to preoccupy the market.
+    It is very popular as a free personal user server.
+    Debian series, which has a wide user base, is an easy-to-access OS for novice Linux users with low entry barriers as its usage is described in detail on online websites or communities.
+
+4. Debian - Apt / Aptitude / APPArmor ?
+Apt vs Aptitude
+1) Apt (low-level package manager)
+
+    apt can be used by other high-level package managers.
+
+2) Aptitude (High-level package manager)
+
+    aptitude automatically removes unused packages. On the other hand, apt requires additional options (ex. auto-remove).
+    With the why and why-not commands, aptitude can check what is required and what conflicts when installing a particular package.
+    If there is a conflict during the installation, uninstallation, or update process, other alternatives are suggested. apt just says no.
+
+3) APPArmor
+
+AppArmor allows which applications can access which files/paths through policy files. There are two modes, enforce mode and complain mode.
+
+    enforce mode: mode that denies access to unauthorized files
+    complain mode: does not actually provide security. Instead, AppArmor leaves a log when the application does something other than what it should do.
+
+Check Apparmor
+
+$sudo aa-status
+
+    AppArmor (Mandatory Access Control Framework)
+    When enabled, AppArmor confines programs according to a set of rules that specify what files a given program can access. This proactive approach helps protect the system against both known and unknown vulnerabilities.
+
+5. Script must display all information all every 5 min.
+
+crontab -e : script확인 및 수정가능
+
+    Or, if it is impossible to modify crontab, change the authority of monitoring.sh so that it can be executed and created.
+
+    $sudo chmod 755 monitoring.sh
+
+A given topic required a script to be displayed every 10 minutes.
+
+*/10 * * * */home/ytak/monitoring.sh | wall
+
+(During defense) Modify so that the script is displayed every 5 minutes as shown below.
+
+*/5 * * * */home/ytak/monitoring.sh | wall 
+
+    Wall command in Linux
+    Wall command in Linux system is used to write a message to all users. This command displays a message, or the contents of a file, or otherwise its standard input, on the terminals of all currently logged in users.
+
+Simple setup
+
+1. Ensure that the machine does not have a graphical environment at launch. A password will be requested before attempting to connect to this machine. Connect with a user which is not a root.
+
+2. Pay attention to the password chosen, it must follow the rules imposed in the subject :
+
+Password policy
+
+    Your password has to expire every 30days
+    The minimum number of days allowed before the modification of a password will be set to 2.
+    The user has to receive a warning message 7 days before their password expires.
+    Your password must be at least 10 characters long. It must contain an uppercase letter and a number. Also, it must not contain more than 3 consecutive identical characters
+    The password must not include the name of the user
+    The following rule does not apply to the root password. The password must have at least 7 characters that are not part of the former password.
+    Of course, your root password has to comply with this policy.
+
+< Passowrd period >
+
+$ sudo vi /etc/login.defs : 비밀번호 정책 설정 및 확인 가능.
+
+PASS_MAX_DAYS 30 : 비밀번호 최대 사용기간. 최대 30일동안 유효.
+PASS_MIN_DAYS 2 : 비밀번호 최소 사용기간. 최소 2일동안 사용. 2일 이후에 비밀번호 변경 가능 
+PASS_WARN_AGE 7 : 경고 메세지 기간 설정. 비밀번호 만료 7일전부터 경고 메세지 출력
+PASS_MIN_LEN 10 : 비밀번호 최소 길이는 10자. 
+
+$ sudo vi /etc/shadow : root 와 ytak에서 비밀번호가 변경 된 것 확인 가능 (2 : 30: 7 로 확인 가능). shadow 파일에서는 비밀번호 관련 설정들이 저장됨. 
+
+< Password rules >
+
+The password policy can be set using the following command.
+
+$ sudo vi /etc/pam.d/common-password
+
+password requisite pam_pwquality.so retry=3 minlen=10 difok=7 ucredit=-1 lcredit=-1 dcredit=-1 reject_username enforce_for_root maxrepeat=3
+
+retry=3
+
+    Password input count setting
+    Up to 3 inputs possible
+
+minlen=10
+
+    password minimum length
+    at least 10 characters
+
+difs=7
+
+    The number of characters that must differ from the previous password
+    Must be at least 7 characters different from previous password
+    Doesn't apply to root because root doesn't store old passwords
+
+ucredit=-1
+
+    uppercase limit
+    -1 : at least one character
+
+lcredit=-1
+
+    Lower case limit
+    -1 : at least one character
+
+dcredit=-1
+
+    number limit
+    -1 : at least one character
+
+reject_username
+
+    Username cannot be entered in password either verbatim or reversed
+
+enforce_for_root
+
+    Apply that password policy to root as well
+
+maxrepeat=3
+
+    Duplicate character limit
+    Up to 3 characters can be duplicated
+    In the case of a password policy, it is applied only to users or passwords created after setting the policy.
+
+Therefore, for the existing user and root
+
+    Change to a strong password
+    Password period enforcement
+    Two things need to be applied.
+
+3. Check that the UFW service is started
+
+$ sudo ufw status verbose : check rules in details
+
+$sudo ufw status numbered : verify the numbered ufw rules
+
+$sudo ufw delete <rules to be deleted> : to delete ufw rules
+
+4. Check that the SSH service is started
+$sudo systemctl status ssh: You can check whether openssh is running or not and the port used.
+
+$ ssh-keygen: Check ssh key
+
+5. Check that chosen Operating System (Debian or Centos)
+$ cat /etc/os-release : verify the chosen OS
+
+User
+
+1. User with the login of the evalutated student is present on the virtual machine
+
+can check my id
+
+$ whoami
+
+2. Check that it (login of evlauated student) has been added and it belongs to the "sudo" and "user42" groups.
+
+You can check user id and group to which you belong
+
+$ id <user id>
+
+    UID and GID in Linux
+    Unix-like Operating Systems identify a user by a value called a user identifier(UID) AND Identify group by a group identifer (GID), are used to determine which system resources a user or group can access.
+    (On Unix OS systems, users are classified by UID or GID to determine access authority.)
+
+    UID (User Identifier)
+    UID is a number assigned by Linux to each user on the system. This number is used to identify the user to the system and to determine which system resources the user can access.
+
+        UID 0 (zero) is reserved for the root.
+        UIDs 1–99 are reserved for other predefined accounts.
+        UID 100–999 are reserved by system for administrative and system accounts/groups.
+        UID 1000–10000 are occupied by applications account.
+        UID 10000+ are used for user accounts
+
+    GID (Group Identifier): Groups in Linux are defined by GIDs(group IDs).
+
+        GID 0 (zero) is reserved for the root group.
+        GID 1–99 are reserved for the system and application use.
+        GID 100+ allocated for the user’s group.
+
+3. Create a new user and assign it a password of your choice, respecting the subject rules. You must now explain to you how he was able to set up the rules requested in the subejct on their virtual machine. Normally there should be one or two modified files.
+1. Create a new user
+
+    $sudo -v : to check your sudo rights, if no error messages appear, you're good to go.
+
+    $sudo adduser <username> : Assign a newuser.
+
+2. Create a new group and assign a user
+
+    c $sudo groupadd <groupname> : Add a group
+
+    $sudo usermod -aG <groupname> <username> : Assign a user to the group
+
+    $sudo id <username> : Check the new username hasbeen assigned to new groupname correctly.
+
+3. Verify the one or two modified files
+
+    $sudo vi /etc/shadow: You can check the password setting of the newly added user.
+
+    $sudo vi /etc/passwd: You can check the address of the newly added user
+
+4. Delete the user and the group
+
+    $sudo deluser <username> : Delete the user
+    $sudo groupdel <groupname> : Delete the group
+    $getent group | grep <groupname to be found> : You can check the group status
+
+5. Advantages and disadvantages of password policy.
+
+    Advantages: Due to the password policy, it is possible to create a strong password (enhanced security)
+    Disavantages: Inconvenience of having to change the password every 30 days, unable to generate the same password as before.
+
+Hostname and partitions
+
+    Check that the hostname of the machine is correctly formatted as follows: login42
+
+$ hostnamectl
+
+    Modify this hostname by replacing login with yours, then restart the machine.
+
+$ sudo hostnamectl set-hostname <new hostname>: change hostname
+
+$ sudo reboot : system reboot
+
+    You can now restore the machine to the original hostname
+
+$ sudo hostnamectl set-hostname <original hostname>: Change to the existing hostname.
+
+$ sudo reboot : system reboot
+
+    How to view the partitions for the virtual machine and compare the output with the example given in the subject and explain how LVM wroks and what it is all about.
+    $ lsblk
+
+Details of partitions
+
+    Root : Superior category. A 12-20 GB partition for the OS. Non-swap partition where the file system foes and required to boot a Linux system.
+
+    Swap : When the system runs out of RAM, the operating system moves inactive pages from RAM into this partition. To store idle processes when the physical RAM is low.
+
+    home : Holds user and configuration files separately from the operating system files. A (Liverpool)
+
+    var : Standard subdirectroy of the root directroy that contains files to which the system writes data during the course of its operation (logfile partition, where system logfiles are stored).
+
+    srv : Contains site-specific data which is served by this system. The /srv/ directory contains site-specific data served by your system running Red Hat Enterprise Linux. This directory gives users the location of data files for a particular service, such as FTP, WWW, or CVS. Data that only pertains to a specific user should go in the /home/ directory (프로토콜 -http/https 이용하여 외부사용자의 공유를 위해 사용됨).
+
+    tmp : Global temporary directories. Web browsers periodically write data to the tmp directory during page views and downloads (a partition used to store temporary files or process temporary tasks in the system).
+
+    var/log : directory where program log files are stored separately
+
+Logical Volume Manager (LVM)
+
+        Allows for very flexible disk space management
+        It provides features like ability to add disk space to a logical volume and its filesystem whie that filesystem is mounted and active and it allows for the collection of multiple physical hard drives and paritioning into a single volume group which can be divided into logical volumes.
+        Also, allows reducing the amount of disk space allocated to a logical volume.
+
+    LVM (Logical Volume Manager) divides one disk into several partitions in Linux and connects them to specific directories using a file system.
+    You can manage disk capacity more flexibly by dividing partitions into volumes, which are logical concepts.
+    Use several smaller capacity hard disks as if they were one larger capacity hard disk (ie, to combine the space of several disks and use them as if they were one).
+    It is used to utilize disk partitions (jjaturi) of ambiguous space.
+    It is used to expand the space of an existing disk.
+    It is used when a large amount of separate storage space is required while operating the server (capacity is the purpose).
+
+LVM is largely divided into three areas.
+
+    Physical Volume (PV) : A physical partition space that exists in a Linux system. Attributed to a PV in LVM, it cannot be physically partitioned even if there is plenty of free space in that space.
+
+    Volume Group (VG) : PV로 등록된 파티션을 다시 하나의 그룹으로 묶을 수 있음. 이 그룹이 바로 VG임. VG로 묶인 PV파티션은 동일 VG 내에서 모든 용량이 통합됨. 또 다시 논리 파티션으로 나눌때에는 VG에서 전체 가용 공간을 판단하여 할당하게 됨.
+
+    Logical Volume (LV) : VG는 다시 자신이 관리중인 PV에서 논리적으로 공간을 분할 할 수 있음. 이렇게 분할된 파티션을 LV라고 함.
+
+이렇게 LV로 나뉜 파티션은 최종적으로 파일 시스템을 할당받고 특정 디렉토리에 마운트 될 수 있음.
+
+While a partition is each storage space divided from a physical space, a volume encompasses all physical storage spaces including partitions.
+What is a Partition?
+
+    Partitioning :
+    Refers to the division of one physical storage device into multiple disk spaces within a system.
+    The physically divided space is called primary, and the logically divided space is called extended.
+
+    Partition :
+    Areas that logically divide hard disk capacity according to user needs. One disk can be divided into several partitions. A single physical space is logically divided and used through a file system called LVM. Each storage space divided in this way is called a partition.
+    Partitions are fixed and have a strong physical concept, and once the size is set, it is difficult to change or add, and the OS recognizes each partition as a separate disk.
+
+    Primary Partition (Primary Partition)
+    1) There is a limitation that only 4 partition information can be stored in the partition table including partition information, and these 4 partitions are called Primary partitions.
+    2) When using more than 4 partitions, set one extended partition and divide multiple logical partitions into the extended partition to store data.
+
+    Extended partition (extended partition)
+    1) Only one can be created on one physical disk, created within the main partition. Partition numbers 1-4 are assigned.
+    2) Create logical partitions, not just for data storage
+    3) Extended partition can use only one of the primary partitions.
+    4) In the extended partition, as many logical partitions as the user wants can be created.
+
+    Logical partition (logical partition)
+    1) Create inside an extended partition
+    2) It is recommended not to create more than 12, and partition numbers after number 5 are attached.
+
+    mount
+    Partitioned physical or logical space appears connected to a specific directory, which is often referred to as mounted. That is, a partition mounted with a specific file system is mounted to a specific directory, so that the user can interact with the partition on the disk through that directory.
+    The task of setting storage devices such as hard disks and floppy disks to be used.
+
+What is Volume?
+
+    Storage on a disk formatted with a file system.
+    A volume is comprehensively called a volume, including physical storage spaces such as disks, SSDs, and DVDs, and each partition itself is a volume.
+    A volume resides on a single partition on the disk and is logically more flexible than partitions.
+    We use one disk by dividing it into several partitions. At this time, one volume may exist for each partition, or only one volume may exist for several partitions.
+
+The most basic way to use a disk in Linux is to divide the disk into partitions, mount each directory as a file system, and save data to a designated location for use.
+(Disk → Partition → Volume group → Logical group → File system (/home))
+Necessity and Advantages of Using Sudo
+
+    Minimizing root privileges is the first step in security, and using sudo is the basis for security.
+
+    You can manage root password efficiently. If the system is operated by multiple administrators, not just one, and many people share the root password, it becomes difficult to change the root password regularly, and the probability of the root password being exposed to the outside increases. Minimizing the time to use root privileges by using sudo is a very big advantage in safe operation or operation from threats.
+
+    Log tracking becomes easy. If there are many cases of su root, it is impossible to check what the user did after becoming su root. Even if part of the system is compromised, you may not even notice it. If you use sudo, you can log in by command, so you can check the exact record.
+
+    The authority and responsibility of management are clarified. When root privileges are shared by multiple people, it is very unclear which operation was done by whom. If you work with sudo, it's clear who did what.
+
+sudo usage
+
+    If sudo is installed, you can register the desired user in the sudoers file.
+    It is recommended to use $visudo to check the syntax.
+
+1. Check that the "Sudo" program is properly installed on the Virtual Machine
+
+$dpkg -l sudo Check if sudo is installed
+
+2. The evaluated student should now show assigning your new user to the "sudo" group.
+
+    sudo adduser <new username>create new user
+
+    sudo usermod -aG sudo <new username>Assign new user to sudo group
+
+    getent groupCheck group status with command
+
+    deluser <user> <group> to remove user from a group
+
+3. The student must first explain the value and operation of sudo using examples of their choice.
+
+=> show how sudo works
+4. Verify that the " /var/log/sudo/" folder exists and has at least one file. Check the contents of the files in this folder and you should see a history of the commands used with sudo.
+
+    su - root계정으로 로그인
+    cd /var/log/sudo/00/00 으로 접근
+    ls 로 들어있는 log 파일들을 확인
+
+5. Run a command via sudo. See if the file(s) in the "/var/log/sudo" folder have been updated.
+
+sudo ls 등 sudo와 관련된 아무 커맨드나 확인하고, 새로운 log 파일이 생겼는지 확인한다.
+UFW (Uncomplicated FireWall)
+
+    UFW is a program for managing a netfilter firewall designed to be easy to use.
+
+1. Check that the "UFW" program is properly installed on the virtual machine. Check that it is working properly.
+
+sudo ufw status verbose : ufw 상태 상세 확인
+2. Should explain what UFW is and the value of using it.
+
+UFW이란, 데비안 계열 빛 다양한 리눅스 환경에서 작동되는 사용하기 쉬운 방화벽 관리 프로그램이다. UFW는 사용하기 쉽게 설계된 넷필터 (리눅스 커널 내부의 네트워크 관련 프레임 워크) 방화벽을 관리하는 프로그램이다. 간단한 명령 및 명령수가 적은 명령줄 인터페이스를 사용하는것이 특징이며, 프로그램 구성에는 iptables을 사용한다. ufw는 기본적으로 8.04 LTS 이후의 모든 데비안 및 우분투에서 사용할 수 있다.
+Firewall / What is Firewall?
+
+A firewall or Firewall is a security system that monitors and controls the traffic (packets) coming through a network. As well as setting internal network security rules used by the school. It is a device that inspects or modifies the safety status of data through external access.
+
+3. List the active rules in UFW. A rule must exist for port 4242.
+
+sudo ufw status numbered : verify the rule numbered
+4. Add a new rule to open port 8080. Check that this one has been added by listing the active rules. After, delete this new rule.
+
+sudo ufw allow 8080 : add 8080 port
+
+sudo ufw delete <Number of the rules to be deleted> : delete the rule
+SSH
+
+    Check that the SSH service is properly installed on the virtual machine and check that is working properly.
+    systemctl status ssh : check the status of ssh
+
+    You must be able to explain basically what SSH (Secure Shell) is and the value of using it.
+
+What is SSH?
+
+SSH is an abbreviation for Secure Shell, and is a protocol that enables secure communication between two computers.
+Even if you are connected to the Internet, you can manage computers or servers in other regions through the terminal of your computer, and you can share files.
+example of representative use)
+
+    data transmission
+    remote control
+
+        A protocol is a form and rule of data exchanged between different communication devices.
+        Example) HTTP, HTTPS, FTP
+
+SSH is Secure Shell Protocol, that is, one of the network protocols. It is a protocol used to secure and secure communication when computers communicate with each other through the same public network.
+Examples of representative uses are as follows.
+
+- SSH (Secure Shell) is a network protocol that gives users, particularly system administrators, a secure way to access a computer over an unsercured network . In addition to providing secure network services, SSH refers to the suite of utilities that implement the SSH protocol. Secure Shell provides strong password authentication and public key authentication, as well as encrypted data communications between two computers connecting over an open network, such as the internet.
+3. Verify that the SSH service only uses port 4242
+
+=> 보너스를 했기 때문에, port4242 와 port80 (wordpress 연결)이 떠야함.
+4. You should use SSH in order to log in with the newly created user. To do this, you can use a key or a simple password. It will depend on the student being evaluated. Of course, you have to make sure that you can't use SSH with the "root" user as stated in the subject.
+Script monitoring
+1. The operation of its script by displaying its code
+
+
+#!/bin/bash
+
+printf "#Architecture: "
+ uname -a
+
+printf "#CPU physical : "
+ nproc --all
+
+printf "#vCPU : "
+ cat /proc/cpuinfo | grep processor | wc -l
+
+printf "#Memory Usage: "
+ free -m | grep Mem |awk '{printf"%d/%dMB (%.2f%%)\n", $3, $2, $3/$2 * 100}'
+
+printf "#Disk Usage: "
+ df -BM -a | grep /dev/mapper/ | awk '{sum+=$3}END{print sum}' | tr -d '\n'
+printf "/"
+ df -H  -a | grep /dev/mapper/LVMGroup-root | awk '{sum+=$2}END{printf sum}' | tr -d '\n'
+printf "Gb ("
+ df -BM -a | grep /dev/mapper/ | awk '{sum1+=$3 ; sum2+=$4} END {printf "%d", sum1 / sum2 * 100}' | tr -d '\n'
+printf "%%)\n"
+
+printf "#CPU load: "
+ mpstat | grep all | awk '{printf "%.2f%%\n", 100-$13}'
+
+printf "#Last boot: "
+ who -b | sed 's/^ *system boot //g'
+
+printf "#LVM use: "
+if [ "$(lsblk | grep lvm | wc -l)" -gt 0 ] ; then printf "yes\n" ; else printf "no\n" ; fi
+
+printf "#Connexions TCP : "
+ ss | grep -i  tcp | wc -l | tr -d  '\n'
+printf " ESTABLISHED\n"
+
+printf "#User log: "
+who | wc -l
+
+printf "#Network: IP "
+ /sbin/ifconfig | grep broadcast | sed 's/inet//g' | sed 's/netmask.*//g' | sed 's/ //g' | tr -d '\n'
+printf " ("
+ /sbin/ifconfig | grep ether | sed 's/.*ether //g' | sed 's/ .*//g' | tr -d '\n'
+
+printf ")\n"
+
+printf "#Sudo : "
+ cat /var/log/auth.log | grep -a sudo | grep -a 'COMMAND=' | wc -l | tr -d '\n'
+printf " cmd\n"
+
+exit 0
+
+Cron
+2. What is "cron"?
+
+    A time-based job scheduler in Unix-like computer operating systes.
+
+    The cron daemon is a long-running process that executes commands at specific dates and times (to run schedule tasks).Cron wakes up every minutes and checks schedule tasks in cron table.
+
+    crontab : crontab is a table where we can schedule such kind of repeated tasks.
+
+3. How the evaluated student set up her script so that it runs every 10 minutes when the server starts up.
+
+crontab -e
+
+*/10 * * * */home/ytak/monitoring.sh | wall
+=> set up the script at every 10 min
+4. The evaluated student should ensure that this script runs every 30s. You can run whatever you want to make sure the script runs with dynamic values correctly, and the student evaluated should make the script stop running when the server starts up, but without modifying the script. To check this point, you will have to restart the server one last time, At startup, it will be necessary to check that the script still exists in the same place, that its rights have remained unchanged, and that it has not been modified.
+
+crontab -e
+
+*/1 * * * */home/ytak/monitoring.sh | wall
+*/1 * * * * sleep 30; /home/ytak/monitoring.sh | wall
+=> Using sleep30s, the monitoring.sh should run every 30 seconds.
+Bonus
+
+    Setting up partitions is worth 2 points (need to corresponded to the paritions with the subejct)
+
+    Setting up WordPress, only with the services required by the subject, is worth 2 points.
+
+http://127.0.0.1:9000/: Check php connection
+http://127.0.0.1:9000/h2s: Check the linked wp site. Set the syntax to h2s when installing Lighttpd.
+(Host Port:9000 , Guest port :80)
+
+port forwarding
+What is a port?
+
+    Programs using the Internet communicate with servers. A computer has only one LAN line, but when there are many programs that need communication, the number that can distinguish these many programs is a port.
+
+What is port forwarding?
+
+    Port forwarding is the translation of a network address while a packet passes through a network gateway such as a router or firewall in a computer network. Port forwarding is a function required to forward the IP and service port of a specific host.
+    In other words, to allow access from the outside.
+
+    The free choice service is worth 1 point. For the free choice service, the evaluated student has to give you a simple explanation about how it works and why they think it is useful(Please note that NGINX and Apache2 are prohibited).
+
+What is PHP (Hypertext preprocessor server-side script)
+
+    PHP is a programming language that runs on the server side and generates HTML programmatically, and stores and expresses data while interacting with the database. It plays a role in dynamically creating web pages.
+    PHP used for dynamic web pages is in the form of a script, so if you add it to the written HTML code, the server interprets the PHP code and creates a web page.
+    PHP was created for the web and is a highly productive language for web programming.
+    In particular, the majority of installable web applications (WordPress..) that can be installed and operated directly on the server are made with PHP.
+    Database linking can be done conveniently. Processing speed is fast.
+    It can be implemented on almost any operating system. The code is easy to write and the syntax is simple. Because it is a scripting language, it is a convenient language that can be executed by entering it inside an HTML document.
+    PHP is simple to deploy on a server, and easy for beginners.
+    It is more secure than JavaScript because the program code is not visible.
+    It is not affected by the version and type of web browser.
+
+Web server?
+
+    A web server is a server program (called system software) that provides users with files containing web pages that we commonly use on the Internet.
+    The primary role of a web server is to deliver pages requested by users.
+
+<Use of web server>
+
+    User -> Web Browser -> HTTP Protocol -> Web Server
+    Web server (HTML document) -> Web browser -> User.
+
+Apache web server vs Ngnix web server
+What is Apache web server?
+
+    It is published as open source and freely available as free software.
+    It can be used in almost any operating system, such as Linux or Windows, and is easy to build.
+    It provides various modules and has a high level of security.
+    There is a vast amount of material due to a strong community.
+
+What is Nginx Web Server?
+
+    It shows high efficiency when a large-scale web traffic processing situation occurs that requires a large number of concurrent users with minimal resources.
+    It is open source, free, and lightweight compared to Apache.
+
+source :
+
+0) What is a virtual machine
+https://joyfuls.tistory.com/48
+
+1) Linux type
+https://coding-factory.tistory.com/318
+
+2) Apparmor definition
+https://wiki.debian.org/AppArmor
+
+3) Overall info
+https://tbonelee.tistory.com/m/16
+
+4) Wall linux command
+https://www.geeksforgeeks.org/wall-command-in-linux-with-examples/
+
+5) UID and GID in Linux
+https://medium.com/@gggauravgandhi/uid-user-identifier-and-gid-group-identifier-in-linux121ea68bf510#:~:text=Identifier%20in%20Linux-,Gaurav%20Gandhi,user%20or%20group%20can%20access
+
+6) How to add and delete users on Debian 10
+https://devconnected.com/how-to-add-and-delete-users-on-debian-10-buster/
+
+7) How to delete Group in Linux
+https://linuxize.com/post/how-to-delete-group-in-linux/
+
+8) Partition Information
+https://www.lifewire.com/do-you-need-home-partition-2202048
+https://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-rg-en-4/s1-filesystem-fhs.html
+https://letitkang.tistory.com/88
+https://new-ngmon.tistory.com/23
+
+9) LVM Information
+https://mamu2830.blogspot.com/2019/12/lvmpv-vg-lv-pe-lvm.html
+https://velog.io/@welloff_jj/Born2beRoot-%EB%AD%90%EA%B0%80-%EB%AD%94%EC%A7%80-%EB%AA%A8%EB%A5%B4%EA%B2%A0%EC%A7%80%EB%A7%8C-%EC%95%84%EB%AC%B4%ED%8A%BC-%EC%A0%95%EB%A6%AC%ED%95%98%EB%8A%94-%EA%B8%80
+https://itguava.tistory.com/100
+https://velog.io/@dogfootbirdfoot/Born2beRoot2
+
+10) Firewall information
+https://ko.wikipedia.org/wiki/%EB%B0%A9%ED%99%94%EB%B2%BD_(%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%82%B9)#/media/%ED%8C%8C%EC%9D%BC:Firewall.png
+
+11) SSH Information
+https://searchsecurity.techtarget.com/definition/Secure-Shell
+
+12) How to use cron
+https://opensource.com/article/17/11/how-use-cron-linux
+
+13) Port forwarding information
+https://storytown.tistory.com/14#:~:text=21%EB%B2%88%20%ED%8F%AC%ED%8A%B8%EB%A1%9C%20%EC%9A%94%EC%B2%AD,Port%2DForwarding%EC%9D%B4%EB%9D%BC%EA%B3%A0%20%ED%95%A9%EB%8B%88%EB%8B%A4 .
+
+14)Install Wordpress on Lighttpd
+https://www.how2shout.com/linux/install-wordpress-on-lighttpd-web-server-ubuntu/
+
+15) PHP Information
+https://server-talk.tistory.com/25
+https://choseongho93.tistory.com/61
+
+16) Web server information
+https://doorbw.tistory.com/29
+https://wiseworld.tistory.com/75
+
+17) sudo info
+https://deois.tistory.com/entry/sudo%EC%82%AC%EC%9A%A9%EC%9D%98-%ED%95%84%EC%9A%94%EC%84%B1#:~:text=sudo%EB%A5%BC%20%EC%93%B0%EA%B2%8C%20%EB%90%98%EB%A9%B4%20command,%EA%B0%80%EB%8A%94%20%EB%A7%A4%EC%9A%B0%20%EB%B6%88%EB%B6%84%EB%AA%85%ED%95%B4%EC%A7%91%EB%8B%88%EB%8B%A4 . 

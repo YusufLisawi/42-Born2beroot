@@ -3,7 +3,107 @@
 ## ```Partitions```
 <br/>
 
-> Comming soon
+
+>Download Debian https://www.debian.org/CD/netinst/
+
+### STEP 1 - VM settings
+---
+
+	VirtualBox > New
+	Name  Anything of your choice
+	Machine Folder > goinfre/VirtualBox VMs/
+	Type: Linux
+	Version: Debian 64-bit
+	Continue > RAM 1024 MB > Continue
+							>  Create a virtual hard disk now > VDI
+							> Fixed size > 8gb or 30.80gb for bonus
+
+	Settings > Storage > Controller: IDE
+				> Optical Drive: disk icon
+				> Choose a disk file
+				> your debian-xx-x-x-amd64.iso > Ok > Start
+
+---
+### STEP 2 - Installation
+---
+
+	Install (Not Graphical install)
+	Choose language (English)
+
+	Territory or area: Choose yours. or -> America
+
+	> Hostname: yourintralogin42
+	> Domain name: leave empty
+	> Root password: (dont forget it); Re-enter.
+	> Full name: Your full name.
+	> Username: yourintralogin
+	> Password: (whatever) -> Time zone: Your time zone or Moscow for Moscow
+	campus (yes). Wait.
+
+---
+### STEP 3 - partition setup
+---
+>For Mandatory part:
+
+	Partition method: Guided - Use entire disk and set up encrypted LVM
+	> SCSIX (0,0,0) (sda)  8.6 GB ATA VBOX HARDDISK
+	> separate /home partition
+	> yes. Wait.
+	> Enter encryption passphrase twice > max >
+	> Finish partitioning and write changes to disk
+	> yes. Wait.
+
+
+>For Bonus part:
+
+	Partition method: Manual > SCSIX (0,0,0) (sda) > 30.80 GB ATA HARDDISK >
+	> yes > pri/log 30.80 GB FREE SPACE > Create a new partition >
+	> 500M > Primary > Beginning > Mount point > Boot >
+	> Done setting up the partition(DSUP) > pri/log > CRANP > "max">
+	> Logical > mount point > Do not mount it > DSUP >
+	> Configure encrypted volumes > Yes > Create encrypted volumes >
+	> /dev/sda5 (press space to choose it) > DSUTP > Finish > yes > Wait.
+
+	Enter encryption passphrase twice > Configure the Logical Volume Manager >
+	> yes > Create volume groupe > LVMGroup >
+	> press pace on /dev/mapper/sda5_crypt, continue >
+	> Create logical volume(CLV next) > LVMGroup (LVMG next) > root > 10G
+	CLV > LVMG > swap > 2.3G
+	CLV > LVMG > home > 5G
+	CLV > LVMG > var > 3G
+	CLV > LVMG > srv > 3G
+	CLV > LVMG > tmp > 3G
+	CLV > LVMG > var-log > 4G > Finish
+
+	Now u see "[!!] Partition disks" window and a lot of LVM VG LVMGroup LV ...
+	Go to first #1 (under home, <volumename> #1 for next steps) >
+	> Use as (UA next): > EXT4 jfl > Mount point: (MP next) > /home >
+	> Done setting up the partition (yep, DSUP)
+	root #1 > UA > ext4 > MU > / - the root fs > DSUP
+	srv #1 > UA > ext4 > MU > /srv > DSUP
+	swap #1 > UA > swap area > DSUP
+	tmp #1 > UA > ext4 > MU > /tmp > DSUP
+	var #1 > UA > ext4 > MU > /var > DSUP
+	var-log #1 > UA > ext4 > MU > Enter manually > /var/log > DSUP
+	Scroll below > Finish partitioning and write changes to disk > yes
+
+
+Now chill, you have plenty of time to stretch your back while debian is
+installing.
+
+---
+
+	[!] Configure the package manager > no
+	Debian archive mirror country > deb.debian.org (doesn't matter) >
+	> leave proxy info field empty and proceed.
+
+	Participate in the package usage survey? > NO!
+
+	Soft seclection: remove stars from ssh/standart system utilities/etc. (space)
+	GRUB - YES! > /dev/sda
+	Installlation complete > continue
+
+Virtual machine is ready...
 
 source ~ https://www.redhat.com/sysadmin/lvm-vs-partitioning
 
@@ -156,12 +256,12 @@ source ~ https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewa
 
 > you need to do port forwarding on the vm in order to make ssh connection
 
-| NAME      | HOST IP | HOST PORT  | GUEST IP | GUEST PORT|
+| NAME	  | HOST IP | HOST PORT  | GUEST IP | GUEST PORT|
 | :---        |    :----:   |          ---: |---: |---: |
 | SSH		| 127.0.0.1	|	4242  |	10.0.2.15 |		4242  |
 | HTTP		| 127.0.0.1	|	80	  |	10.0.2.15 |		80    |
 | FTP		| 127.0.0.1	|	21	  |	10.0.2.15 |		21    |
-<!-- <br/> -->
+<!-- <br/> --->
 #### ```(Or just use Bridged Adapter)```
 <br/>
 
@@ -188,7 +288,7 @@ source ~ https://medium.com/platform-engineer/port-forwarding-for-ssh-http-on-vi
 
 ---
 ### ``` Change password policy ```
-(sudo chage)
+***(sudo chage) to modify the user you're using***
 > We open the file ```login.defs``` with Nano/vim
 ```console
 $ sudo nano /etc/login.defs
@@ -212,7 +312,7 @@ $	sudo nano /etc/pam.d/common-password
 ```
 > Find this line
 ```console
-password        requisite                      pam_pwquality.so retry=3
+password        requisite   pam_pwquality.so retry=3
 ```
 > And add to it the following
 ```c
@@ -520,13 +620,25 @@ sudo ufw allow 20/tcp
 sudo nano /etc/vsftpd.conf
 ```
 ```c
-	write_enable=YES
-	user_sub_token=$USER
-	local_root=/home/$USER/ftp
-	userlist_enable=YES
-	userlist_file=/etc/vsftpd.userlist
-	userlist_deny=NO
-	chroot_local_user=YES
+listen=NO
+listen_ipv6=YES
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+chroot_local_user=YES
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+force_dot_files=YES
+pasv_min_port=40000
+pasv_max_port=50000
+
+user_sub_token=$USER
+local_root=/home/$USER/ftp
 ```
 > Create a new FTP user
 ```
@@ -557,10 +669,10 @@ echo ftpyelaissa | sudo tee -a /etc/vsftpd.userlist
 >Finally restart FTP service
 
 ```
-sudo systemctl restart vsftpd
+sudo systemctl restart vsftpd.service
 ```
 ```
-sudo systemctl enable vsftpd
+sudo systemctl enable vsftpd.service
 ```
 source ~ https://linuxhint.com/setup-vsftpd-ftp-server-on-debian10/
 
