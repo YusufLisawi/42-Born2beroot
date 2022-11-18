@@ -1,8 +1,11 @@
+# Knowledge
+
+source ~ https://miro.com/app/board/uXjVPFOvxQk=/?share_link_id=347742750356
+
 # Mandatory
 
 ## ```Partitions```
 <br/>
-
 
 >Download Debian https://www.debian.org/CD/netinst/
 
