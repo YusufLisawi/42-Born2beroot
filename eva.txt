@@ -248,3 +248,9 @@ Crontab :->
 
 is a firewall, it stands for uncomplicated firewall, a firewall is a network security system that prevents unauthorized access from entering a private network
 by filtering the incoming network data, based on its rules (access control list, contains IP, protocol, destination and port)
+
+# |lighttpd|
+
+Lighttpd is a “secure, fast, compatible and very flexible” web server optimized for high-performance environments. It consumes very few resources compared to other web servers and especially fast for running AJAX applications. It is also open source and uses a BSD license and works on UNIX-like systems, such as Linux or BSD.
+
+Combining Debian with Lighttpd is a safe bet if you want a fast, efficient and secure web server. Go for it.
