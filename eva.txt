@@ -1,0 +1,250 @@
+# | what is A Virtual Machine (VM) |
+
+A Virtual Machine (VM) is a compute resource that uses software instead of a physical computer to run programs and deploy apps.One or more virtual “guest”
+machines run on a physical “host” machine.  Each virtual machine runs its own operating system and functionsseparately from the other VMs.
+
+-> why VM ?
+
+VMs can run multiple operating system environments on a single physical computer, saving physical space, time and management costs.
+Trying out a new operating system (OS), including beta releases.
+Backing up your existing OS.
+Running software or apps on operating systems that they weren't originally intended for.
+
+# | What is hypervisor |
+
+A hypervisor, also known as a virtual machine monitor or VMM, is software that creates and runs virtual machines (VMs). A hypervisor allows one host computer,
+to support multiple guest VMs by virtually sharing its resources, such as memory and processing.
+
+-> why hypervisor
+
+Hypervisors make it possible to use more of a system’s available resources and provide greater IT mobility since the guest VMs are independent of the host hardware.
+This means they can be easily moved between different servers. Because multiple virtual machines can run off of one physical server with a hypervisor,
+- it’s just a fancy word for an application that we install on our OS, it creates a fake hardware by borrowing from our real hardware(CPU, RAM, storage..)
+
+-> types of hypervisor
+
+- type 1 is comonly used in data centers since it have direct access to the physical server hardware.
+- type 2 is comonly used by students, or ppl who just want to try new OS, or do some experiments without harming their computer.
+
+# |What is server|
+
+A server is a computer program or device that provides a service to another computer program and its user, also...
+
+# |What is Linux|
+
+Just like Windows, iOS, and Mac OS, Linux is an operating system. In fact,
+
+Linux is an open source operating system (OS). An operating system is the software that directly manages a system’s hardware and resources,like CPU, memory,
+and storage. The OS sits between applications and hardware and makes the connections between all of your software and the physical resources that do the work.
+
+# |What is Kernel Linux|
+
+The Linux kernel is the main component of a Linux operating system (OS) and is the core interface between a computer’s hardware and its processes.
+It communicates between the 2,managing resources as efficiently as possible.
+
+The kernel has 4 jobs :
+
+Memory management, Process management, Device drivers, System calls and security;
+
+# |What is Debian|
+
+Debian is a free operating system, developed and maintained by the Debian project. A free Linux distribution with thousands of applications to meet our users' needs.
+
+-> why Dobian :
+
+Debian is made of free and open source software and will always be 100% free. Free for anyone to use, modify, and distribute.
+This is our main promise to our users. It's also free of cost.
+
+Debian is a Linux-based operating system for a wide range of devices including laptops, desktops and servers. We provide a reasonable default configuration
+for every package as well as regular security updates during the packages' lifetimes.
+
+Most hardware is supported by the Linux kernel which means that Debian will support it as well.
+
+It's easier to install and configure,
+
+# |What different between software and operation system|
+
+System software is the software that manages the resources and allows a user to interact with the system.
+
+The operating system acts as the interface between the user and the computer hardware.
+
+# |Centos Vs Debian|
+
+-> similarities between Debian and CentOS
+
+Both are free.
+Both have community support.
+Both are stable and get updated on a timely basis.
+Debian, as well as CentOS, are both based on the Linux kernel.
+ 
+-> Differences
+
+CentOS is more stable and supported by a large community;
+Debian has relatively less market preference;
+
+For Package management, RPM as package format and YUM/DNF as the package manager are supported by CentOS;
+whereas Debian has the DEB as package format and dpkg/APT as the package manager;
+
+CentOS does not support many architectures;
+Debian has more packages;
+
+Dobian it has a graphical interface and user-friendly applications for the desktop;
+CentOS It does not have an easy GUI;
+
+Debian it easier to install and use;
+CentOS it no easier in the install packages;
+
+# |Files of the Debian|
+ / :
+- simple / represents the root directory. All other files and directories are contained in the root directory.
+
+ /root :
+- But don't get / confused with /root! /root is the home directory of the root user, or superuser. It's a directory called /root, but it isn't the root directory /.
+
+ /bin :
+- This directory contains "binaries," executable files which are essential to the operation of the system. Examples are: the shell (bash), and the commands you just learned such as cp.
+
+ /sbin :
+- This directory contains "system binaries," things that the root user or system administrator might want to use.
+
+ /usr :
+- contains most of the files you'll be interested in. It has many subdirectories: /usr/bin and /usr/sbin are pretty much like /bin and /sbin, except that the directories in /usr are not considered "essential to the operation of the system."
+- While not essential to get the computer operating,/usr does contain the applications you'll use to get real work done. Also in /usr you'll find the /usr/man, /usr/info, and /usr/doc directories - these contain manual pages, info pages, and other documentation, respectively.
+
+ /etc :
+- contains all the system-wide configuration files. Whenever you want to change something that affects all users of your computer - such as how you connect to the internet, or what kind of video card you have - you'll probably have to log on as root and change a file in /etc.
+
+- /tmp :
+Here you'll find temporary files, most of them created by the system. This directory is generally erased on a regular basis, or every time you reboot the system. You can create files here if you want, just be aware they might get deleted automatically.
+
+ /var :
+- contains "variable" files, that the system changes automatically. For example, incoming mail is stored here. The system keeps a log of its actions here. There are a number of other automatically generated files here as well. You'll mostly be interested in the contents of /var/log,
+- where you can find error messages and try to figure out what you're system's up to if something goes wrong.
+
+/ srv :
+- ontains site-specific data which is served by this system.
+
+/ var/log :
+- the records that Linux stores for administrators to keep track and monitor important events about the server, kernel, services, and applications running on it.
+
+|-Partition-|
+
+boot : The boot partition is the disk partition that contains the operating system folde also is a primary partition that contains the boot loader.
+Swap : The primary function of swap space is to substitute disk space for RAM memory when real RAM fills up and more space is needed.
+
+# |Wath is Apparmor|
+
+AppArmor is a Mandatory Access Control framework. When enabled, AppArmor confines programs according to a set of rules that specify what files a given program,
+can access. This proactive approach helps protect the system against both known and unknown vulnerabilities.
+
+also appArmor is an app that allow us restricte access of some apps, prgs.. allow access to only some parts of the system,
+let only specific things to be done (raw socket access, and the permission to read, write, or execute files.
+
+
+# |What is TCP|
+
+TCP stands for Transmission Control Protocol a communications standard that enables application programs and computing devices to exchange messages over a network.
+It is designed to send packets across the internet and ensure the successful delivery of data and messages over networks.
+
+
+# |All About ssh|
+
+-> What is ssh
+
+ssh or Secure Shell is a network communication protocol that enables two computers to communicate.
+it utilizes a client-server paradigm in which clients and servers communicate via a secure channel.
+
+-|The SSH protocol has three layers| :
+
+The transport layer :->
+
+-- Ensures secure communication between the server and the client, monitors data encryption/decryption,
+-- and protects the integrity of the connection. It also performs data caching and compression.
+
+The authentication layer :->
+-- Conducts the client authentication procedure.
+
+The connection layer :->
+-- Manages communication channels after the authentication.
+
+some ssh terminology :
+
+Client : A client program for establishing a connection with the server;
+server : An SSH server program for communicating with SSH clients;
+Connection layer : The layer of the SSH protocol that manages communication channels;
+Private key : Part of the public-private key pair for user authentication kept as a secret on the local machine;
+Public key  : Part of the public-private key pair for user authentication copied to the SSH server during the authentication process;
+
+How ssh protocol does it works ?
+
+The protocol works in the client-server model, which means that the connection is established by the SSH client connecting to the SSH server.
+The SSH client drives the connection setup process and uses public key cryptography to verify the identity of the SSH server. After the setup phase
+the SSH protocol uses strong symmetric encryption and hashing algorithms to ensure the privacy and integrity of the data,
+that is exchanged between the client and server.
+
+-> another source :
+
+SSH is a client-server based protocol. This means the protocol allows a device requesting information or services (the client)
+to connect to another device (the server). When a client connects to a server over SSH, the machine can be controlled like a local computer.
+The server has a designated TCP port over which it monitors the network, waiting for clients to initialize the connection. Before a client connects
+and starts issuing SSH commands, it needs to pass the authentication process.
+
+
+# |What is a port|
+
+Ports are standardized across all network-connected devices, with each port assigned a number. Most ports are reserved for certain protocols
+
+# |What is a hostname|
+
+A hostname is a label that is assigned to a the numeric address of a computer, server or network device. In the context of the Internet,
+the hostname is typically the domain name and the numeric address of the computer or server is the IP address.
+
+# |What is a IP|
+
+An IP (Internet Protocol) address uniquely identifies a computer/server on the Internet.
+
+# |All about Apt and Aptitude|
+
+-> What is Apt and Aptitude
+
+Aptitude and apt-get are two of the popular tools which handle package management.
+Both are capable of handling all kinds of activities on packages including installation, removal, search etc.
+
+-> About Apt :
+
+APT stands for Advanced Packaging Tool. It is an open-source tool, which means you can use it without the need to pay anything.
+APT is designed to handle software installation and removal. APT was part of Debian’s .deb package.
+
+-> About Aptitude :
+
+Aptitude is also an advanced packaging tool, This means that you can use Aptitude to install and remove packages using it, 
+
+-> Differences between apt and Aptitude
+
+apt It has many features reverse Aptitude for example apt --help apt -purg ...
+when you what install a packages using the apt then apt if found a wrong Advantages, does nothing unlike Aptitude if found any wrong Advantages
+he update them and install the package without any problem
+
+another different :<
+
+when you what to upgrade system by (apt upgrade), then apt Updates packages except for packages related to a system Example if you are on verion 12
+you will not convert to version 13 Unless you use apt dist-upgrade.
+then Aptitude upgrade all without any problem
+
+# |What is tty|
+
+Linux operating system represents everything in a file system, the hardware devices that we attach are also represented as a file.
+The terminal is also represented as a file. There a command exists called tty which displays information related to terminal.
+
+# |What is cron and crontab|
+
+Cron :->
+comes from chron, the Greek prefix for ‘time’. Cron is a daemon which runs at the times of system boot.
+
+Crontab :->
+(CRON TABle) is a file which contains the schedule of cron entries to be run and at specified times. File location varies by operating systems.
+
+# |What is ufw|
+
+is a firewall, it stands for uncomplicated firewall, a firewall is a network security system that prevents unauthorized access from entering a private network
+by filtering the incoming network data, based on its rules (access control list, contains IP, protocol, destination and port)
