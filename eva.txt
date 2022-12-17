@@ -1,3 +1,4 @@
+
 # | what is A Virtual Machine (VM) |
 
 A Virtual Machine (VM) is a compute resource that uses software instead of a physical computer to run programs and deploy apps.One or more virtual “guest”
@@ -42,6 +43,27 @@ and storage. The OS sits between applications and hardware and makes the connect
 The Linux kernel is the main component of a Linux operating system (OS) and is the core interface between a computer’s hardware and its processes.
 It communicates between the 2,managing resources as efficiently as possible.
 
+# |Process|
+
+In computer science, a process is a program that is executing on a computer. When a program is launched, the operating system creates a process to run it. A process is an instance of a program that is running on a computer.
+
+Each process has its own memory space and resources, such as CPU time and open files. The operating system is responsible for managing processes and allocating resources to them. Processes can run concurrently, meaning that multiple processes can be executing at the same time on a computer.
+
+A process can be in one of several states, such as running, waiting, or terminated. When a process is running, it is being executed by the computer's CPU. When a process is waiting, it is not currently being executed, but it is ready to be run as soon as resources are available. When a process is terminated, it has completed execution or has been stopped by the operating system.
+
+Processes can communicate with each other through various mechanisms, such as pipes or shared memory. They can also create new processes, called child processes, which can run concurrently with the parent process.
+
+In general, the process of executing a program on a computer involves the following steps:
+
+    The user launches the program.
+    The operating system creates a process to run the program.
+    The operating system allocates resources to the process, such as memory and CPU time.
+    The process is executed by the CPU.
+    When the process completes, it is terminated and the resources it was using are released.
+
+|shorter|
+In short, a process in a computer is an instance of a program that is executing on the computer. It has its own memory space and resources, and is managed by the operating system. Processes can run concurrently, meaning that multiple processes can be executing at the same time on a computer. A process can be in one of several states, such as running, waiting, or terminated. Processes can communicate with each other and create new processes, called child processes, which can run concurrently with the parent process.
+----
 The kernel has 4 jobs :
 
 Memory management, Process management, Device drivers, System calls and security;
